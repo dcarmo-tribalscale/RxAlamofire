@@ -298,7 +298,7 @@ public func requestJSON(_ method: HTTPMethod,
                         encoding: ParameterEncoding = URLEncoding.default,
                         headers: HTTPHeaders? = nil,
                         interceptor: RequestInterceptor? = nil)
-  -> Observable<(HTTPURLResponse, Any)> {
+  -> Observable<(HTTPURLResponse, any Sendable)> {
   return Alamofire.Session.default.rx.responseJSON(method,
                                                    url,
                                                    parameters: parameters,
@@ -315,7 +315,7 @@ public func requestJSON(_ method: HTTPMethod,
  - returns: An observable of the tuple `(NSHTTPURLResponse, AnyObject)`
  */
 public func requestJSON(_ urlRequest: URLRequestConvertible,
-                        interceptor: RequestInterceptor? = nil) -> Observable<(HTTPURLResponse, Any)> {
+                        interceptor: RequestInterceptor? = nil) -> Observable<(HTTPURLResponse, any Sendable)> {
   return request(urlRequest, interceptor: interceptor).flatMap { $0.rx.responseJSON() }
 }
 
@@ -336,7 +336,7 @@ public func json(_ method: HTTPMethod,
                  encoding: ParameterEncoding = URLEncoding.default,
                  headers: HTTPHeaders? = nil,
                  interceptor: RequestInterceptor? = nil)
-  -> Observable<Any> {
+  -> Observable<any Sendable> {
   return Alamofire.Session.default.rx.json(method,
                                            url,
                                            parameters: parameters,
@@ -926,7 +926,7 @@ public extension Reactive where Base: Alamofire.Session {
                     encoding: ParameterEncoding = URLEncoding.default,
                     headers: HTTPHeaders? = nil,
                     interceptor: RequestInterceptor? = nil)
-    -> Observable<(HTTPURLResponse, Any)> {
+    -> Observable<(HTTPURLResponse, any Sendable)> {
     return request(method,
                    url,
                    parameters: parameters,
@@ -951,7 +951,7 @@ public extension Reactive where Base: Alamofire.Session {
             encoding: ParameterEncoding = URLEncoding.default,
             headers: HTTPHeaders? = nil,
             interceptor: RequestInterceptor? = nil)
-    -> Observable<Any> {
+    -> Observable<any Sendable> {
     return request(method,
                    url,
                    parameters: parameters,
@@ -1268,11 +1268,11 @@ public extension Reactive where Base: Alamofire.Session {
 // MARK: Request - Common Response Handlers
 
 public extension ObservableType where Element == DataRequest {
-  func responseJSON() -> Observable<DataResponse<Any, AFError>> {
+  func responseJSON() -> Observable<DataResponse<any Sendable, AFError>> {
     return flatMap { $0.rx.responseJSON() }
   }
 
-  func json(options: JSONSerialization.ReadingOptions = .allowFragments) -> Observable<Any> {
+  func json(options: JSONSerialization.ReadingOptions = .allowFragments) -> Observable<any Sendable> {
     return flatMap { $0.rx.json(options: options) }
   }
 
@@ -1386,7 +1386,7 @@ public extension Reactive where Base: DataRequest {
     }
   }
 
-  func responseJSON() -> Observable<DataResponse<Any, AFError>> {
+  func responseJSON() -> Observable<DataResponse<any Sendable, AFError>> {
     return Observable.create { observer in
       let request = self.base
 
@@ -1474,7 +1474,7 @@ public extension Reactive where Base: DataRequest {
 
    - returns: An instance of `Observable<AnyObject>`
    */
-  func responseJSON(options: JSONSerialization.ReadingOptions = .allowFragments) -> Observable<(HTTPURLResponse, Any)> {
+  func responseJSON(options: JSONSerialization.ReadingOptions = .allowFragments) -> Observable<(HTTPURLResponse, any Sendable)> {
     return responseResult(responseSerializer: JSONResponseSerializer(options: options))
   }
 
@@ -1485,7 +1485,7 @@ public extension Reactive where Base: DataRequest {
 
    - returns: An instance of `Observable<AnyObject>`
    */
-  func json(options: JSONSerialization.ReadingOptions = .allowFragments) -> Observable<Any> {
+    func json(options: JSONSerialization.ReadingOptions = .allowFragments) -> Observable<any Sendable> {
     return result(responseSerializer: JSONResponseSerializer(options: options))
   }
 
